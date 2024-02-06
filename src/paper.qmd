@@ -1,0 +1,91 @@
+---
+title: "Web Scraping Wikipedia's data on Canadian Prime Ministers"
+date: today
+date-format: long
+author: "Timothius Prajogi"
+format: pdf
+editor: visual
+thanks: "Code and data supporting this analysis is available at: https://github.com/prajogt/$$$.git"
+bibliography: ref.bib
+---
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+#### Workspace setup ####
+library(janitor)
+library(tidyverse)
+library(knitr)
+
+```
+
+The data was scraped from Wikipedia's page on Canadian Prime Ministers [@citewiki].
+
+These delay statistics were downloaded, cleaned, parsed, analyzed, and visualized using R [@citeR], a statistical programming language, with package support from `tidyverse` [@citetidyverse], a collection of libraries which included the following packages that were utilized: 
+
+* `ggplot2` [@citeggplot] 
+* `dplyr` [@citedplyr] 
+* `readr` [@citereadr] 
+* `tibble` [@citetibble]
+
+Additionally for webscraping libraries xml2 [@citexml] and rvest [@citervest] were used.
+
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| label: tbl-pms_data
+#| tbl-cap: "A sample of Canadian Prime Minister's Lifespans"
+
+# Read in cleaned data
+canadian_pms <- 
+  read_csv(
+     file = "data/clean_canadian_pms.csv",
+     show_col_types = FALSE
+  )
+
+canadian_pms |>
+  head() |>
+  kable(
+    col.names = c("Prime Minister", "Birth Year", "Death Year", "Age at death")
+  )
+```
+
+```{r}
+#| eval: true
+#| echo: false
+#| message: false
+#| warning: false
+#| label: fig-pms
+#| fig-cap: "The lifespans of Canadian Prime Ministers"
+
+
+canadian_pms |>
+  mutate(
+    still_alive = if_else(is.na(death), "Yes", "No"),
+    death = if_else(is.na(death), as.integer(2024), death)
+  ) |>
+  mutate(name = as_factor(name)) |>
+  ggplot(
+    aes(x = birth, xend = death, y = name, yend = name, color = still_alive)
+    ) +
+  geom_segment() +
+  labs(
+    x = "Year of birth", y = "Prime minister", color = "PM is currently alive"
+    ) +
+  theme_minimal() +
+  scale_color_brewer(palette = "Set1") +
+  theme(legend.position = "bottom")
+```
+
+# Findings
+
+ASDLKASLKDm
+
+# Process
+
+# References
+
