@@ -5,7 +5,7 @@ date-format: long
 author: "Timothius Prajogi"
 format: pdf
 editor: visual
-thanks: "Code and data supporting this analysis is available at: https://github.com/prajogt/$$$.git"
+thanks: "Code and data supporting this analysis is available at: https://github.com/prajogt/web_scraping"
 bibliography: ref.bib
 ---
 
@@ -21,9 +21,7 @@ library(knitr)
 
 ```
 
-The data was scraped from Wikipedia's page on Canadian Prime Ministers [@citewiki].
-
-These delay statistics were downloaded, cleaned, parsed, analyzed, and visualized using R [@citeR], a statistical programming language, with package support from `tidyverse` [@citetidyverse], a collection of libraries which included the following packages that were utilized: 
+This data was downloaded, cleaned, parsed, analyzed, and visualized using R [@citeR], a statistical programming language, with package support from `tidyverse` [@citetidyverse], a collection of libraries which included the following packages that were utilized: 
 
 * `ggplot2` [@citeggplot] 
 * `dplyr` [@citedplyr] 
@@ -83,9 +81,34 @@ canadian_pms |>
 
 # Findings
 
-ASDLKASLKDm
+Of the 23 Prime Ministers Canada has had, a lot of them die around similar times with other Prime Ministers. For instance the first 4 presidents lived and died around the same time, which isn't that interesting in itself since it is the beginning of Canadian independence. Then Mackenzie Bowell to Wilfrid Laurier all died around the time of WW1. Then many of the later Prime Ministers died before the 1980s, but there was a 21 year gap until the next Prime Minister died, and then another 20 year gap until the next. 
+
+These gaps were caused by the age differences between the PMs. It was not always the case that older PMs were elected before younger PMs. Some standouts are John Thompson who died relatively young at 48 years of age, and who was also elected young, younger than other Prime Ministers of that time period by around 20 years. Another stand out is Joe Clark, who outlived the Prime Minister who came after him, also due to his relative youth upon election.
+
+Then later, due to Stephen Harpers long term spanning 9 years, a jump in age can be seen in the next Prime Minister, Justin Trudeau, being 12 years younger than his predecessor.
 
 # Process
+
+## The Data
+
+The data was scraped from Wikipedia's page on Canadian Prime Ministers [@citewiki]. Which contains a table of all of Canada's Prime Ministers, their year of birth, their year of death, as well as other information not covered in this report such as length of term as Prime Minister, which political party they are in, and the acts and laws they had passed.
+
+## Issues in the Process
+
+What took longer than it should have was the SelectorGadget portion of the data scraping. Since there were multiple tables using the `.wikitable` class, the result of `html_table()` was not what was expected. It was as simple as selecting the element from the list that was returned by `html_table()` instead, but the error messages provided by `clean_names()` were not helpful in debugging this. 
+
+## What was fun?
+
+For me it was sort of fun when we were using regex to parse through the data. From a long line of plain text, we were able to gather the data we wanted for this report. 
+
+It also showed the tedium that goes into webscraping, not every website / websource styles their text, html, or css the same, making it difficult to achieve general functionality. Even in this case, if we were to not inspect element Wikipedia's webpage, we wouldn't know which elements and classes held the data we want. `.wikitable` is used to make all Wikipedia tables look the same throughout different articles, but other Wikis and pages may use different tags and methods to present data.
+
+## What would I do differently?
+
+In the future I would consider more specific selectors or consider different methods of selection. Especially for larger pages with multiple `.wikitables` it would be difficult to know which one is relevant. Luckily for this page there were only 2, but there are definitely some pages with many more. 
+
+Also, better ways of filtering out junk data should be done. When webscraping, the returned value also returned some header / metadata values, which got included in the rows. If I were to have not explicitly printed out all values, it may have gotten through to the end. Possible regex to ensure that only characters, periods and apostrophes would be kept (possible elements in a name), and all "code-like" which would include curly braces, commas and other symbols and therefore be excluded.
+
 
 # References
 
